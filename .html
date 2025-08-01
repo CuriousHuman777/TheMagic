@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV to Contacts - Convert Lead Lists to Phone Contacts Instantly</title>
+    <meta name="description" content="Free tool to convert CSV contact lists to phone contacts. Perfect for real estate agents, sales teams, and professionals. No signup required.">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gradient-1: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-2: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--gray-800);
+            overflow-x: hidden;
+            background: var(--gray-50);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .container {
+                padding: 0 1.5rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                padding: 0 2rem;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--gradient-1);
+            color: white;
+            padding: 4rem 0 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 70%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 30%, rgba(255,255,255,0.08) 0%, transparent 50%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1.125rem, 2.5vw, 1.375rem);
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+            max-width: 42rem;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 400;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--gradient-2);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 9999px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.125rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-lg);
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 6rem 0;
+            background: white;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.25rem;
+            color: var(--gray-600);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .problem-card {
+            background: var(--gray-50);
+            padding: 2rem;
+            border-radius: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid var(--gray-200);
+        }
+
+        .problem-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            background: white;
+        }
+
+        .problem-icon {
+            width: 4rem;
+            height: 4rem;
+            background: linear-gradient(135deg, var(--warning), #d97706);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .problem-card p {
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 6rem 0;
+            background: var(--gray-50);
+        }
+
+        .tool-container {
+            background: white;
+            border-radius: 2rem;
+            padding: 3rem;
+            margin-top: 3rem;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--gray-200);
+        }
+
+        @media (max-width: 768px) {
+            .tool-container {
+                padding: 1.5rem;
+                border-radius: 1.5rem;
+            }
+        }
+
+        .upload-area {
+            border: 2px dashed var(--primary);
+            border-radius: 1.5rem;
+            padding: 3rem 2rem;
+            text-align: center;
+            background: var(--gray-50);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 2rem;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-dark);
+            background: #fafaff;
+        }
+
+        .upload-area.dragover {
+            border-color: var(--success);
+            background: #f0fdf4;
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 768px) {
+            .upload-area {
+                padding: 2rem 1rem;
+            }
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .upload-icon {
+            width: 4rem;
+            height: 4rem;
+            background: var(--gradient-1);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .upload-text {
+            font-size: 1.25rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .upload-subtext {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+
+        /* Messages */
+        .message {
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            text-align: center;
+            margin: 1rem 0;
+            display: none;
+            font-weight: 500;
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+            color: #166534;
+            border: 1px solid #86efac;
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, #fecaca, #fca5a5);
+            color: #991b1b;
+            border: 1px solid #f87171;
+        }
+
+        /* Stats Display */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: var(--gradient-1);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-card-number {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        /* Contact List */
+        .contact-list {
+            max-height: 400px;
+            overflow-y: auto;
+            background: var(--gray-50);
+            border-radius: 1rem;
+            margin: 2rem 0;
+            border: 1px solid var(--gray-200);
+        }
+
+        .contact-item {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+
+        .contact-item:hover {
+            background: white;
+        }
+
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+
+        .contact-name {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .contact-phone {
+            color: var(--primary);
+            font-size: 0.875rem;
+        }
+
+        /* Download Button */
+        .download-btn {
+            background: var(--gradient-2);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: none;
+            margin: 2rem auto;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .download-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+
+        .download-btn:disabled {
+            background: var(--gray-300);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            width: 3rem;
+            height: 3rem;
+            background: var(--gradient-2);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: white;
+            font-size: 1.25rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.125rem;
+            margin-bottom: 0.75rem;
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 6rem 0;
+            background: white;
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 4rem;
+            height: 4rem;
+            background: var(--gradient-1);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin: 0 auto 1.5rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .step h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .step p {
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+
+        /* Final CTA */
+        .final-cta {
+            padding: 6rem 0;
+            background: var(--gradient-1);
+            color: white;
+            text-align: center;
+        }
+
+        .final-cta h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .final-cta p {
+            font-size: 1.25rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .footer p {
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .footer a:hover {
+            opacity: 0.8;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Loading state */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* Focus styles for accessibility */
+        .cta-button:focus,
+        .download-btn:focus,
+        .upload-area:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Turn CSV Lists into Phone Contacts in 30 Seconds</h1>
+                <p class="subtitle">Stop wasting hours manually entering contacts. Convert your lead lists to phone-ready contacts instantly - perfect for real estate agents, sales teams, and professionals.</p>
+                <a href="#tool" class="cta-button">
+                    <i class="fas fa-rocket"></i>
+                    Try It Free Now
+                </a>
+                
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number">30s</div>
+                        <div class="stat-label">Average Conversion Time</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Privacy Safe</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">Free</div>
+                        <div class="stat-label">Forever</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem">
+        <div class="container">
+            <h2 class="section-title">The Problem Every Professional Faces</h2>
+            <p class="section-subtitle">Manual contact entry is time-consuming, error-prone, and breaks your workflow</p>
+            
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Hours of Manual Work</h3>
+                    <p>Manually typing 50+ contacts takes 2-3 hours. One typo and you lose a potential client.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">
+                        <i class="fas fa-phone-slash"></i>
+                    </div>
+                    <h3>Broken Flow State</h3>
+                    <p>Constant switching between CSV and phone breaks your calling momentum and reduces conversions.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3>Error-Prone Process</h3>
+                    <p>Manual entry leads to wrong numbers, missed opportunities, and frustrated potential clients.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution/Tool Section -->
+    <section class="solution" id="tool">
+        <div class="container">
+            <h2 class="section-title">The Solution: Instant CSV to Contact Conversion</h2>
+            <p class="section-subtitle">Upload your CSV file and get phone-ready contacts in seconds</p>
+            
+            <div class="tool-container">
+                <div class="upload-area" id="uploadArea" tabindex="0">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <div class="upload-text">Drop your CSV file here or click to browse</div>
+                    <div class="upload-subtext">Supports CSV files with Name, Phone, Website, Email columns</div>
+                    <input type="file" id="fileInput" accept=".csv" />
+                </div>
+                
+                <div id="errorMessage" class="message error-message"></div>
+                <div id="successMessage" class="message success-message"></div>
+                
+                <div id="statsContainer" class="stats-container" style="display: none;">
+                    <div class="stat-card">
+                        <div class="stat-card-number" id="totalContacts">0</div>
+                        <div class="stat-card-label">Total Contacts</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-number" id="validPhones">0</div>
+                        <div class="stat-card-label">Valid Phone Numbers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-number" id="withWebsites">0</div>
+                        <div class="stat-card-label">With Websites</div>
+                    </div>
+                </div>
+                
+                <div id="contactList" class="contact-list" style="display: none;"></div>
+                
+                <button id="downloadBtn" class="download-btn">
+                    <i class="fas fa-download"></i> Download VCF File
+                </button>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>100% Private</h3>
+                    <p>Your data never leaves your browser. Everything processes locally on your device.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Lightning Fast</h3>
+                    <p>Convert hundreds of contacts in seconds. No waiting, no processing delays.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Universal Compatibility</h3>
+                    <p>Works with any phone - iPhone, Android, or any device that imports VCF files.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <h3>No Registration</h3>
+                    <p>Start using immediately. No accounts, no emails, no personal information required.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">Three simple steps to convert your contacts</p>
+            
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Upload Your CSV</h3>
+                    <p>Drag and drop your contact list CSV file. We support standard formats with Name, Phone, Email, and Website columns.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Review & Download</h3>
+                    <p>Preview your contacts, see the stats, and download the VCF file that's ready for your phone.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Import & Start Calling</h3>
+                    <p>Import the VCF file to your phone contacts. They'll automatically sync with WhatsApp, and you're ready to call!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <div class="container">
+            <h2>Ready to Save Hours of Manual Work?</h2>
+            <p>Join thousands of professionals who've streamlined their contact management</p>
+            <a href="#tool" class="cta-button">
+                <i class="fas fa-rocket"></i>
+                Start Converting Now - It's Free
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 CSV to Contacts Tool. Built with ❤️ for professionals who value their time.</p>
+            <p>A simple, privacy-focused tool for contact management</p>
+        </div>
+    </footer>
+
+    <script>
+        let contactsData = [];
+        
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const statsContainer = document.getElementById('statsContainer');
+        const contactList = document.getElementById('contactList');
+        const downloadBtn = document.getElementById('downloadBtn');
+        
+        // File upload handling
+        uploadArea.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                fileInput.click();
+            }
+        });
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+        
+        function handleFile(file) {
+            if (!file.name.toLowerCase().endsWith('.csv')) {
+                showError('Please select a CSV file.');
+                return;
+            }
+            
+            // Show loading state
+            uploadArea.classList.add('loading');
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    parseCSV(e.target.result);
+                } catch (error) {
+                    showError('Error reading file: ' + error.message);
+                } finally {
+                    uploadArea.classList.remove('loading');
+                }
+            };
+            reader.readAsText(file);
+        }
+        
+        function parseCSV(csvText) {
+            const lines = csvText.split('\n');
+            if (lines.length < 2) {
+                showError('CSV file appears to be empty or invalid.');
+                return;
+            }
+            
+            const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, '').toLowerCase());
+            
+            // Check for required columns
+            const hasName = headers.some(h => h.includes('name'));
+            const hasPhone = headers.some(h => h.includes('phone') || h.includes('mobile') || h.includes('tel'));
+            
+            if (!hasName || !hasPhone) {
+                showError('CSV must contain at least Name and Phone columns.');
+                return;
+            }
+            
+            contactsData = [];
+            
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+                
+                const values = parseCSVLine(line);
+                if (values.length < headers.length) continue;
+                
+                const contact = {};
+                headers.forEach((header, index) => {
+                    const value = values[index] ? values[index].trim().replace(/"/g, '') : '';
+                    contact[header] = value;
+                });
+                
+                // Find name and phone fields dynamically
+                const nameField = Object.keys(contact).find(key => key.includes('name'));
+                const phoneField = Object.keys(contact).find(key => key.includes('phone') || key.includes('mobile') || key.includes('tel'));
+                
+                if (contact[nameField] && contact[phoneField]) {
+                    const processedContact = {
+                        name: contact[nameField],
+                        phone: contact[phoneField],
+                        email: contact.email || contact['e-mail'] || '',
+                        website: contact.website || contact.url || contact.site || ''
+                    };
+                    contactsData.push(processedContact);
+                }
+            }
+            
+            if (contactsData.length === 0) {
+                showError('No valid contacts found. Please check your CSV format.');
+                return;
+            }
+            
+            hideError();
+            showSuccess(`Successfully processed ${contactsData.length} contacts!`);
+            displayStats();
+            displayContacts();
+            downloadBtn.style.display = 'block';
+            downloadBtn.disabled = false;
+        }
+        
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current);
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            
+            result.push(current);
+            return result;
+        }
+        
+        function displayStats() {
+            const validPhones = contactsData.filter(c => c.phone && c.phone.length > 5).length;
+            const withWebsites = contactsData.filter(c => c.website && c.website.length > 5).length;
+            
+            document.getElementById('totalContacts').textContent = contactsData.length;
+            document.getElementById('validPhones').textContent = validPhones;
+            document.getElementById('withWebsites').textContent = withWebsites;
+            
+            statsContainer.style.display = 'grid';
+            statsContainer.classList.add('animate-fade-in-up');
+        }
+        
+        function displayContacts() {
+            contactList.innerHTML = '';
+            
+            const contactsToShow = contactsData.slice(0, 10);
+            contactsToShow.forEach(contact => {
+                const contactDiv = document.createElement('div');
+                contactDiv.className = 'contact-item';
+                contactDiv.innerHTML = `
+                    <div>
+                        <div class="contact-name">${escapeHtml(contact.name)}</div>
+                        <div class="contact-phone">${escapeHtml(contact.phone)}</div>
+                    </div>
+                    <div style="color: var(--success);">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                `;
+                contactList.appendChild(contactDiv);
+            });
+            
+            if (contactsData.length > 10) {
+                const moreDiv = document.createElement('div');
+                moreDiv.className = 'contact-item';
+                moreDiv.style.fontStyle = 'italic';
+                moreDiv.style.color = 'var(--gray-600)';
+                moreDiv.innerHTML = `
+                    <div>
+                        <div>... and ${contactsData.length - 10} more contacts</div>
+                    </div>
+                `;
+                contactList.appendChild(moreDiv);
+            }
+            
+            contactList.style.display = 'block';
+            contactList.classList.add('animate-fade-in-up');
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            successMessage.style.display = 'none';
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                hideError();
+            }, 5000);
+        }
+        
+        function hideError() {
+            errorMessage.style.display = 'none';
+        }
+        
+        function showSuccess(message) {
+            successMessage.textContent = message;
+            successMessage.style.display = 'block';
+            errorMessage.style.display = 'none';
+        }
+        
+        // Download VCF file
+        downloadBtn.addEventListener('click', () => {
+            if (contactsData.length === 0) {
+                showError('No contacts to download.');
+                return;
+            }
+            
+            downloadBtn.disabled = true;
+            downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+            
+            try {
+                const vcfContent = generateVCF(contactsData);
+                downloadVCF(vcfContent);
+                
+                downloadBtn.innerHTML = '<i class="fas fa-check"></i> Downloaded!';
+                setTimeout(() => {
+                    downloadBtn.innerHTML = '<i class="fas fa-download"></i> Download VCF File';
+                    downloadBtn.disabled = false;
+                }, 2000);
+            } catch (error) {
+                showError('Error generating VCF file: ' + error.message);
+                downloadBtn.innerHTML = '<i class="fas fa-download"></i> Download VCF File';
+                downloadBtn.disabled = false;
+            }
+        });
+        
+        function generateVCF(contacts) {
+            let vcfContent = '';
+            
+            contacts.forEach(contact => {
+                vcfContent += 'BEGIN:VCARD\n';
+                vcfContent += 'VERSION:3.0\n';
+                vcfContent += `FN:${contact.name}\n`;
+                vcfContent += `N:${contact.name};;;;\n`;
+                
+                if (contact.phone) {
+                    // Clean phone number
+                    const cleanPhone = contact.phone.replace(/[^\d+\-\(\)\s]/g, '');
+                    vcfContent += `TEL;TYPE=CELL:${cleanPhone}\n`;
+                }
+                
+                if (contact.email && contact.email.includes('@')) {
+                    vcfContent += `EMAIL:${contact.email}\n`;
+                }
+                
+                if (contact.website && (contact.website.startsWith('http') || contact.website.includes('.'))) {
+                    let website = contact.website;
+                    if (!website.startsWith('http')) {
+                        website = 'https://' + website;
+                    }
+                    vcfContent += `URL:${website}\n`;
+                }
+                
+                vcfContent += 'END:VCARD\n';
+            });
+            
+            return vcfContent;
+        }
+        
+        function downloadVCF(content) {
+            const blob = new Blob([content], { type: 'text/vcard;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `contacts_${new Date().toISOString().split('T')[0]}.vcf`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Add some nice hover effects
+        const cards = document.querySelectorAll('.problem-card, .feature-card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+        
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in-up');
+                }
+            });
+        }, observerOptions);
+        
+        // Observe elements for animation
+        document.querySelectorAll('.problem-card, .feature-card, .step').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
